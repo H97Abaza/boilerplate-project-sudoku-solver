@@ -134,9 +134,6 @@ class SudokuSolver {
           return false;
         }
         if (recursive_solve(tmpPuzzle)) {
-          console.log("validata:", isValid(tmpPuzzle, "I", 9, tmpPuzzle[80]));
-          console.log("tmp puszzle: ", tmpPuzzle);
-          console.log("tmp puszzle 81: ", tmpPuzzle[80]);
           return isValid(tmpPuzzle, "I", 9, tmpPuzzle[80])
             ? tmpPuzzle
             : "Puzzle cannot be solved";
