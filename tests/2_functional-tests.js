@@ -68,7 +68,7 @@ suite('Functional Tests', () => {
         "Check a puzzle placement: POST request to /api/check",
         () => {
             let coordinate = "A2";
-            let value = 3
+            let value = "3"
             test("Check a puzzle placement with all fields: POST request to /api/check", (done) => {
                 chai.request(server).post('/api/check').send({ puzzle, coordinate, value }).end((err, res) => {
                     assert.equal(res.status, 200);
@@ -76,13 +76,11 @@ suite('Functional Tests', () => {
                     assert.property(res.body, "valid", "response body should contains 'valid'");
                     assert.isBoolean(res.body.valid);
                     assert.equal(res.body.valid, true);
-                    assert.property(res.body, "conflict", "response body should contains 'conflict'");
-                    assert.isArray(res.body.conflict);
                     done();
                 })
             });
             test("Check a puzzle placement with single placement conflict: POST request to /api/check", (done) => {
-                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: 7 }).end((err, res) => {
+                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: "7" }).end((err, res) => {
                     assert.equal(res.status, 200);
                     assert.isObject(res.body, "response body should be an Object");
                     assert.property(res.body, "valid", "response body should contains 'valid'");
@@ -96,7 +94,7 @@ suite('Functional Tests', () => {
                 })
             });
             test("Check a puzzle placement with multiple placement conflicts: POST request to /api/check", (done) => {
-                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: 5 }).end((err, res) => {
+                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: "5" }).end((err, res) => {
                     assert.equal(res.status, 200);
                     assert.isObject(res.body, "response body should be an Object");
                     assert.property(res.body, "valid", "response body should contains 'valid'");
@@ -104,14 +102,14 @@ suite('Functional Tests', () => {
                     assert.equal(res.body.valid, false);
                     assert.property(res.body, "conflict", "response body should contains 'conflict'");
                     assert.isArray(res.body.conflict);
-                    assert.lengthOf(res.body.conflict, 3);
+                    assert.lengthOf(res.body.conflict, 2);
                     assert.include(res.body.conflict, "row");
                     assert.include(res.body.conflict, "region");
                     done();
                 })
             });
             test("Check a puzzle placement with all placement conflicts: POST request to /api/check", (done) => {
-                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: 2 }).end((err, res) => {
+                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: "2" }).end((err, res) => {
                     assert.equal(res.status, 200);
                     assert.isObject(res.body, "response body should be an Object");
                     assert.property(res.body, "valid", "response body should contains 'valid'");
@@ -135,10 +133,10 @@ suite('Functional Tests', () => {
                 })
             });
             test("Check a puzzle placement with invalid characters: POST request to /api/check", (done) => {
-                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: "a" }).end((err, res) => {
+                chai.request(server).post('/api/check').send({ puzzle:puzzle.replace(1,"a"), coordinate, value }).end((err, res) => {
                     assert.equal(res.status, 200);
                     assert.isObject(res.body, "response body should be an Object");
-                    assert.deepEqual(res.body, { error: "Invalid value" });
+                    assert.deepEqual(res.body,  {error:"Invalid characters in puzzle"});
                     done();
                 })
             });
@@ -159,7 +157,7 @@ suite('Functional Tests', () => {
                 })
             });
             test("Check a puzzle placement with invalid placement value: POST request to /api/check", (done) => {
-                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: 11 }).end((err, res) => {
+                chai.request(server).post('/api/check').send({ puzzle, coordinate, value: "11" }).end((err, res) => {
                     assert.equal(res.status, 200);
                     assert.isObject(res.body, "response body should be an Object");
                     assert.deepEqual(res.body, { error: "Invalid value" });

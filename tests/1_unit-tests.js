@@ -14,7 +14,7 @@ suite('Unit Tests', () => {
         "135762984946381257728459613694517832812936745357824196473298561581673429269145378";
     let row = "A"
     let column = "2"
-    let value = 3
+    let value = "3"
 
     suite("Test Solver.validate(puzzleString)", () => {
         // Logic handles a valid puzzle string of 81 characters
