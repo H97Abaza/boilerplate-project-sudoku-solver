@@ -10,29 +10,24 @@ class SudokuSolver {
 
   checkRowPlacement(puzzleString, row, column, value) {
     let row_n=row.toLowerCase().charCodeAt(0) - 97
-    puzzleString=replaceAt(puzzleString, row_n * 9 + column - 1, ".");
+    puzzleString=replaceAt(puzzleString, row_n * 9 + parseInt(column) - 1, ".");
     let rows = puzzleString.match(/[1-9.]{9}/g);
     let rowString = rows[row_n];
     let ret = true;
     let match = rowString.match(RegExp(value, "g"));
     if (match) ret = false;
-    /* console.log(
-      "Row Placement:\t\tCOL:",
-      column,
-      "ROW:",
-      row,
-      " VALUE:",
-      value,
-      " Row STR:\t",
-      rowString,
-      "\tValid:",
-      ret
-    ); */
+    // console.log(
+    //   "Row Placement:\t\tCOL:",column,
+    //   "ROW:",row,
+    //   " VALUE:",value,
+    //   " Row STR:\t",rowString,
+    //   "\tValid:",ret
+    // );
     return ret;
   }
 
   checkColPlacement(puzzleString, row, column, value) {
-    puzzleString=replaceAt(puzzleString,(row.toLowerCase().charCodeAt(0) - 97) * 9 + column - 1,".");
+    puzzleString=replaceAt(puzzleString,(row.toLowerCase().charCodeAt(0) - 97) * 9 + parseInt(column) - 1,".");
     let columnString = puzzleString.replace(
       /(.)(.)(.)(.)(.)(.)(.)(.)(.)/g,
       "$" + column
@@ -40,24 +35,19 @@ class SudokuSolver {
     let ret = true;
     let match = columnString.match(RegExp(value, "g"));
     if (match) ret = false;
-   /*  console.log(
-      "Column Placement:\tCOL:",
-      column,
-      "ROW:",
-      row,
-      " VALUE:",
-      value,
-      " Column STR:\t",
-      columnString,
-      "\tValid:",
-      ret
-    ); */
+    // console.log(
+    //   "Column Placement:\tCOL:",column,
+    //   "ROW:",row,
+    //   " VALUE:",value,
+    //   " Column STR:\t",columnString,
+    //   "\tValid:",ret
+    // );
     return ret;
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
     row = row.toLowerCase().charCodeAt(0) - 97;
-    puzzleString = replaceAt(puzzleString, row * 9 + column - 1, ".");
+    puzzleString = replaceAt(puzzleString, row * 9 + parseInt(column) - 1, ".");
     let cstart = Math.floor((column - 1) / 3) * 3;
     let cend = cstart + 3;
     let rstart = Math.floor(row / 3) * 3;
@@ -70,26 +60,15 @@ class SudokuSolver {
     let ret = true;
     let match = region.match(RegExp(value), "g");
     if (match) ret = false;
-    /* console.log(
-      "Region Placement:\tCOL:",
-      column,
-      "ROW:",
-      row,
-      " VALUE:",
-      value,
-      " Region STR:\t",
-      region,
-      "\tValid:",
-      ret,
-      " Positions(3x3):\tCOL:",
-      cstart,
-      "-",
-      cend,
-      " | ROW:",
-      rstart,
-      "-",
-      rend
-    ); */
+    // console.log(
+    //   "Region Placement:\tCOL:",column,
+    //   "ROW:",row,
+    //   " VALUE:",value,
+    //   " Region STR:\t",region,
+    //   "\tValid:",ret,
+    //   " Positions(3x3):\tCOL:",cstart,"-",cend,
+    //   " | ROW:",rstart,"-",rend
+    // );
     return ret;
   }
   solve(puzzleString) {
