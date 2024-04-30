@@ -1,3 +1,5 @@
+const replaceAt = (str, ind, ch) =>
+  str.substring(0, ind) + ch + str.substring(++ind);
 class SudokuSolver {
   validate(puzzleString) {
     if (puzzleString.length !== 81)
@@ -7,10 +9,13 @@ class SudokuSolver {
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
+    let row_n=row.toLowerCase().charCodeAt(0) - 97
+    puzzleString=replaceAt(puzzleString, row_n * 9 + column - 1, ".");
     let rows = puzzleString.match(/[1-9.]{9}/g);
-    let rowString = rows[row.toLowerCase().charCodeAt(0) - 97];
+    let rowString = rows[row_n];
     let ret = true;
-    if (rowString.match(value)) ret = false;
+    let match = rowString.match(RegExp(value, "g"));
+    if (match) ret = false;
     /* console.log(
       "Row Placement:\t\tCOL:",
       column,
@@ -27,13 +32,15 @@ class SudokuSolver {
   }
 
   checkColPlacement(puzzleString, row, column, value) {
+    puzzleString=replaceAt(puzzleString,(row.toLowerCase().charCodeAt(0) - 97) * 9 + column - 1,".");
     let columnString = puzzleString.replace(
       /(.)(.)(.)(.)(.)(.)(.)(.)(.)/g,
       "$" + column
     );
     let ret = true;
-    if (columnString.match(value)) ret = false;
-    /* console.log(
+    let match = columnString.match(RegExp(value, "g"));
+    if (match) ret = false;
+   /*  console.log(
       "Column Placement:\tCOL:",
       column,
       "ROW:",
@@ -50,6 +57,7 @@ class SudokuSolver {
 
   checkRegionPlacement(puzzleString, row, column, value) {
     row = row.toLowerCase().charCodeAt(0) - 97;
+    puzzleString = replaceAt(puzzleString, row * 9 + column - 1, ".");
     let cstart = Math.floor((column - 1) / 3) * 3;
     let cend = cstart + 3;
     let rstart = Math.floor(row / 3) * 3;
@@ -60,8 +68,9 @@ class SudokuSolver {
       .map((row) => row.substring(cstart, cend))
       .join("");
     let ret = true;
-    if (region.match(value)) ret = false;
-   /*  console.log(
+    let match = region.match(RegExp(value), "g");
+    if (match) ret = false;
+    /* console.log(
       "Region Placement:\tCOL:",
       column,
       "ROW:",
@@ -87,8 +96,7 @@ class SudokuSolver {
     try {
       if (this.validate(puzzleString) === true) {
         let tmpPuzzle = puzzleString;
-        const replaceAt = (str, ind, ch) =>
-          str.substring(0, ind) + ch + str.substring(++ind);
+
         const findEmptyCell = () => {
           let i = tmpPuzzle.indexOf(".");
           // console.log("index: ", i);
@@ -106,8 +114,7 @@ class SudokuSolver {
             this.checkRegionPlacement(puzzle, row, column, value)
           );
         };
-        function recursive_solve(puzzleString) {
-          tmpPuzzle = puzzleString;
+        function recursive_solve() {
           // console.log("TMP Puzzle:\t", tmpPuzzle);
 
           if (!findEmptyCell()) {
@@ -116,9 +123,9 @@ class SudokuSolver {
 
           const { row, column, index } = findEmptyCell();
           for (let i = 1; i <= 9; i++) {
-            if (isValid(puzzleString, row, column, i)) {
+            if (isValid(tmpPuzzle, row, column, i)) {
               tmpPuzzle = replaceAt(tmpPuzzle, index, i);
-              if (recursive_solve(tmpPuzzle)) {
+              if (recursive_solve()) {
                 return true;
               }
               tmpPuzzle = replaceAt(tmpPuzzle, index, ".");
@@ -127,7 +134,12 @@ class SudokuSolver {
           return false;
         }
         if (recursive_solve(tmpPuzzle)) {
-          return tmpPuzzle;
+          console.log("validata:", isValid(tmpPuzzle, "I", 9, tmpPuzzle[80]));
+          console.log("tmp puszzle: ", tmpPuzzle);
+          console.log("tmp puszzle 81: ", tmpPuzzle[80]);
+          return isValid(tmpPuzzle, "I", 9, tmpPuzzle[80])
+            ? tmpPuzzle
+            : "Puzzle cannot be solved";
         } else {
           return "Puzzle cannot be solved";
         }
