@@ -18,17 +18,17 @@ suite('Unit Tests', () => {
 
     suite("Test Solver.validate(puzzleString)", () => {
         // Logic handles a valid puzzle string of 81 characters
-        suite("Logic handles a valid puzzle string of 81 characters", () => {
+        test("Logic handles a valid puzzle string of 81 characters", () => {
             assert.equal(solver.validate(puzzleString), true);
         })
 
         // Logic handles a puzzle string with invalid characters (not 1-9 or .)
-        suite("Logic handles a puzzle string with invalid characters (not 1-9 or .)", () => {
+        test("Logic handles a puzzle string with invalid characters (not 1-9 or .)", () => {
             assert.equal(solver.validate(puzzleString.replace(".", "a")), "Invalid characters in puzzle");
         })
 
         // Logic handles a puzzle string that is not 81 characters in length
-        suite("Logic handles a puzzle string that is not 81 characters in length", () => {
+        test("Logic handles a puzzle string that is not 81 characters in length", () => {
             assert.equal(solver.validate(puzzleString.substring(0, 80)), "Expected puzzle to be 81 characters long");
         })
 
@@ -37,12 +37,12 @@ suite('Unit Tests', () => {
     suite("Test Solver.checkRowPlacement()", () => {
 
         // Logic handles a valid row placement
-        suite("Logic handles a valid row placement", () => {
+        test("Logic handles a valid row placement", () => {
             assert.deepEqual(solver.checkRowPlacement(puzzleString, row, column, value), true);
         })
 
         // Logic handles an invalid row placement
-        suite("Logic handles an invalid row placement", () => {
+        test("Logic handles an invalid row placement", () => {
             assert.equal(solver.checkRowPlacement(puzzleString, "B", column, value), false);
         })
     })
@@ -50,12 +50,12 @@ suite('Unit Tests', () => {
     suite("Test Solver.checkColPlacement()", () => {
 
         // Logic handles a valid column placement
-        suite("Logic handles a valid column placement", () => {
+        test("Logic handles a valid column placement", () => {
             assert.equal(solver.checkColPlacement(puzzleString, row, column, value), true);
         })
 
         // Logic handles an invalid column placement
-        suite("Logic handles an invalid column placement", () => {
+        test("Logic handles an invalid column placement", () => {
             assert.equal(solver.checkColPlacement(puzzleString, row, 1, value), false);
         })
     })
@@ -63,12 +63,12 @@ suite('Unit Tests', () => {
     suite("Test Solver.checkRegionPlacement()", () => {
 
         // Logic handles a valid region (3x3 grid) placement
-        suite("Logic handles a valid region (3x3 grid) placement", () => {
+        test("Logic handles a valid region (3x3 grid) placement", () => {
             assert.equal(solver.checkRegionPlacement(puzzleString, row, column, value), true);
         })
 
         // Logic handles an invalid region (3x3 grid) placement
-        suite("Logic handles an invalid region (3x3 grid) placement", () => {
+        test("Logic handles an invalid region (3x3 grid) placement", () => {
             assert.equal(solver.checkRegionPlacement(puzzleString, row, column, 6), false);
         })
     })
@@ -76,12 +76,12 @@ suite('Unit Tests', () => {
     suite("Test Solver.solve()", () => {
 
         // Valid puzzle strings pass the solver
-        suite("Valid puzzle strings pass the solver", () => {
+        test("Valid puzzle strings pass the solver", () => {
             assert.equal(solver.solve(puzzleString), solution, "Valid puzzle strings should pass the solver");
         })
 
         // Invalid puzzle strings fail the solver
-        suite("Invalid puzzle strings fail the solver", () => {
+        test("Invalid puzzle strings fail the solver", () => {
             assert.equal(
                 solver.solve(invalidPuzzleString),
                 "Puzzle cannot be solved",
@@ -90,7 +90,7 @@ suite('Unit Tests', () => {
         })
 
         // Solver returns the expected solution for an incomplete puzzle
-        suite("Solver returns the expected solution for an incomplete puzzle", () => {
+        test("Solver returns the expected solution for an incomplete puzzle", () => {
             assert.equal(
                 solver.solve(incompletePuzzleString),
                 "Expected puzzle to be 81 characters long",
